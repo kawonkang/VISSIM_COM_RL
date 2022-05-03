@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# %%==============================================================================================================================================================================
-# 전체 프로세스
-# @ 수정필요   
-# ================================================================================================================================================================================
+"""
+2017 - Created @author: Hyunjin
+2020 - Edited @Kawon
+
+"""
 from collections import deque
 from keras.layers import Dense
 from keras.optimizers import Adam
@@ -19,8 +20,8 @@ from datetime import datetime
 import pandas as pd
 import copy
 ## My Module
-GET_CURRENT_DIR = os.getcwd() # 현재 디렉토리 위치 가져오기
-# sys.path.append(os.getcwd() + '\\my_module') # 모듈 위치 추가
+GET_CURRENT_DIR = os.getcwd() 
+# sys.path.append(os.getcwd() + '\\my_module') 
 
 # import MyLogger
 import InitialSetting
@@ -313,7 +314,7 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
 
         DesSpeedControl_TAll = []
 
-        # EPISODE 수집인데 우리는 에피소드 수 X 구간속도 컨트롤러 개수 에피소드나오게 됨
+        # iter fot EPISODE 
         for e in range(start, EPISODES):
             print('@@@@@@@@@@@@@@@@@@에피소드: '+str(e))
             done = False
@@ -441,8 +442,6 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
                             currentDesSpeed[i]=currentState_df[currentState_df.Name == control_Section_List[i]][['Name','DesSpeedDistr(10)','DesSpeedDistr(20)', 'DesSpeedDistr(30)', 'DesSpeedDistr(145)','DesSpeedDistr(146)','DesSpeedDistr(147)','DesSpeedDistr(148)']].iloc[0].tolist()
                         
                         for c in range(len(control_Section_List)):
-                            # risk에서 새로 교통량 평균 등 산출해서 가져와서 state로 사용할것
-                            # action_list[c] = agent.get_action(currentState[section_mask,5:])
                             currentState_input = np.append(currentDesSpeed[c],np.array([Risk_S[c], vol_T[c+1], acc_T[c+1], ttc_cnt_T[c+1], cpi_T[c+1], jerk_T[c+1], yaw_T[c+1]]), axis=-1)
                             currentState_input = currentState_input[1:].reshape(1, state_size).astype(np.float64)
 
@@ -451,9 +450,7 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
                             currentState_input_allSection[c] = currentState_input[0]
 
                         new_action_list = des.act(action_list, control_Section_List, default_desSpeed, currentDesSpeed,currentState_df)
-                        # new_action_list = action_list
 
-                        #Tot_file = 1min file
                         print("action_list in timestep" + str(timestep))
                         print(new_action_list)
 
@@ -503,7 +500,7 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
                             # Tot_file.to_excel(save_folder+'/raw_Episode' + str(e) + '_' + str(timestep) + '.xlsx')
                             
                             # fix
-                            for c in range(len(data_collection_link_Name)): #링크 7개 각각 수행 나중에 risk 넣을 때 i+1로 넣을 것(다음 링크의 위험도)
+                            for c in range(len(data_collection_link_Name)):
                                 des.UpdateLinkInfo()
                                 current_Section_risk = des.risk(data_collection_link_Name[c],Tot_file,section_Last_link[c],timestep)
                                 risk_value = current_Section_risk[0,8]
@@ -525,7 +522,7 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
                             print(risk_list)
 
                             if (min_timer == 1):
-                                risk_T_1min_All = [risk_list] # 이 risk_list를 위에서 가져가야함
+                                risk_T_1min_All = [risk_list] 
                                 risk_S_1min_All = [risk_speed]
 
                                 vol_All  = [vol]
