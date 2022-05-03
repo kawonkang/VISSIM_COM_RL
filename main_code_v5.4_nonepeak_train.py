@@ -212,8 +212,7 @@ class VissimEnvironment():
                                       'CoordRearX', 'CoordRearY','CoordRearZ','CoordFrontX','CoordFrontY','CoordFrontZ', 'RouteNo',
                                       'Spacing', 'LeadTargNo', 'LeadTargType' #for calc TTC
                                      )
-        
-        #@@@@check@@@@
+
 
     def reset(self, Controlled_Vehicle_MPR, control_Section_List, currentState_df):       
         self.Vissim.Simulation.Stop() 
@@ -337,15 +336,15 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
             actionAll       = []
             NewRewardAll    = []
             nextStateAll    = []
-
-            # @@ 나중에 정리할건데 아래 두 값이 state 저장 행렬임
+            
+            # State
             currentState_input_allSection = np.zeros(shape=(len(control_Section_List), state_size))
             nxtState_input_allSection = np.zeros(shape=(len(control_Section_List), state_size))
 
             SafetyRewardAll = [0 for i in range(len(control_Section_List))]
             weightForReward = []       
         
-            StateDataset_1min = [] ##하나의 에피소드 내 1분마다 업데이트됨 
+            StateDataset_1min = [] ##하나의 에피소드 내 1분마다 업데이트
             StateDataset_All  = [] ##하나의 에피소드 내 1분 자료기반 집계(평균)자료 모음
 
             sec_timer = 0 #0 1~60
@@ -646,7 +645,6 @@ def Training(model_version, network_name, file_name, save_folder, concent_unit, 
                                 else:
                                     first_state = False #return first_state with Nxt_Tot_file, CurDesSpeed
 
-                                # for t-1 safety, speed (1,7) @@@@@
                                 Risk_T_tmp = copy.deepcopy(Risk_T)
                                 Risk_S_tmp = copy.deepcopy(Risk_S)
 
